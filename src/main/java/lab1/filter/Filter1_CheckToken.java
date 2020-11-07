@@ -94,14 +94,23 @@ public class Filter1_CheckToken  implements Filter {
 			chain.doFilter(request, response);
 			break;
 		case EXPIRED:
+			System.out.println("无效token");
+			request.setAttribute("success", false);
+			request.setAttribute("msg", "来自"+request.getRequestURI()+"，token超时，请先登录");
+			request.setAttribute("preurl", request.getRequestURI());
+			RequestDispatcher rd1=request.getRequestDispatcher("/ssoapp/login");
+			response.setContentType("text/html;charset=UTF-8;");
+			rd1.forward(request, response);
+			break;
 		case INVALID:
 			System.out.println("无效token");
-			request.setAttribute("success", true);
-			request.setAttribute("msg", "来自"+request.getRequestURI()+",请先登录");
+			request.setAttribute("success", false);
+			request.setAttribute("msg", "来自"+request.getRequestURI()+"，token无效，请先登录");
 			request.setAttribute("preurl", request.getRequestURI());
-			RequestDispatcher rd=request.getRequestDispatcher("/ssoapp/login");
+			RequestDispatcher rd2=request.getRequestDispatcher("/ssoapp/login");
 			response.setContentType("text/html;charset=UTF-8;");
-			rd.forward(request, response);
+			rd2.forward(request, response);
+			break;
 		}
 	}
 
