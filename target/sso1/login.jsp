@@ -24,6 +24,9 @@
 <body>
 <div class="content">
     <div class="item">
+        <a href="/">返回首页</a>
+    </div>
+    <div class="item">
         <label for="userName">用户名：</label><input type="text" name="userName" id="userName" placeholder="请输入用户名" value="admin" autocomplete="off"/>
     </div>
     <div class="item">
@@ -31,7 +34,8 @@
     </div>
     <div class="item">
         <button type="submit" id="login">登录</button>
-    </div>
+    </div><br>
+    <%=request.getAttribute("msg")==null?"":request.getAttribute("msg")%><br>
 </div>
 <script type="text/javascript" src="../jquery-2.1.0.js" ></script>
 <script>
@@ -50,7 +54,7 @@
             success:function (resp) {
                 alert(resp.msg);
                 if(resp.success){
-                    location.href="/";
+                    location.href="<%=request.getAttribute("preurl")%>";
                     //$('body').append(JSON.stringify(resp.msg));
                 }else{$('body').append('wrong');}
 

@@ -16,13 +16,16 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-@WebServlet(urlPatterns="/servlet/login",loadOnStartup=1)
+@WebServlet(urlPatterns="/ssoapp/login",loadOnStartup=1)
 public class LoginServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 5285600116871825644L;
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		if(req.getAttribute("preurl")==null){
+			req.setAttribute("preurl","/");
+		}
 		RequestDispatcher rd=req.getRequestDispatcher("/login.jsp");
 		resp.setContentType("text/html;charset=UTF-8;");
 		rd.forward(req, resp);

@@ -8,31 +8,18 @@
     <title></title>
 </head>
 <body>
-我是页面web2
-<button type="button" id="getdata">点我ajax请求主页面数据</button><br/>
-<button type="button" id="loginout">点我退出到登陆页面</button><br/>
+<%=request.getAttribute("msg")%><br>
+<%="从token中获取的id为"+request.getAttribute("userNameFromToken")%><br>
+<%="此token还有"+request.getAttribute("timeRemainForToken")+"失效"%><br>
+<button type="button" id="loginout">登出</button><br/>
+<a  href="/">首页</a><br/>
 <script type="text/javascript" src="../jquery-2.1.0.js" ></script>
+<script src="../jquery.cookie-1.4.1.min.js" type="text/javascript"></script>
 <script>
-    $("#getdata").on('click',function(e){
-        $.ajax({
-            type:"get",
-            dataType:"json",
-            url:"/getInfo2",
-            headers:{
-                token:localStorage.getItem("token")//将token放到请求头中
-            },
-            success:function(resp){
-                alert(resp.msg);
-                if(resp.success){
-                    $('body').append(JSON.stringify(resp.data));
-                }
-            }
-        });
-    });
 
     $("#loginout").on("click",function(){
-        localStorage.removeItem("token");
-        location.href="login.jsp";
+        $.cookie('token', '', { expires: -1 });
+        location.href="./login";
     });
 </script>
 </body>

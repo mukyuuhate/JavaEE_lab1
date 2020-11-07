@@ -24,7 +24,7 @@ import java.util.Map;
  * @author running@vip.163.com
  *
  */
-@WebFilter(urlPatterns="/servlet/*")
+@WebFilter(urlPatterns="/ssoapp/*")
 public class Filter1_CheckToken  implements Filter {
 
 
@@ -37,7 +37,7 @@ public class Filter1_CheckToken  implements Filter {
 		HttpServletResponse response=(HttpServletResponse) arg1;
 		System.out.println("filter1 "+request.getRequestURI());
 //		response.setHeader("Access-Control-Allow-Origin", "*");
-		if(request.getRequestURI().endsWith("/servlet/login")||request.getRequestURI().endsWith("jquery-2.1.0.js")){
+		if(request.getRequestURI().endsWith("/ssoapp/login")||request.getRequestURI().endsWith("jquery-2.1.0.js")){
 			//登陆接口不校验token，直接放行
 			chain.doFilter(request, response);
 			System.out.println("filter1 login page "+request.getRequestURI());
@@ -96,12 +96,12 @@ public class Filter1_CheckToken  implements Filter {
 		case EXPIRED:
 		case INVALID:
 			System.out.println("无效token");
-			//token过期或者无效，则输出错误信息返回给ajax
-			JSONObject outputMSg=new JSONObject();
-			outputMSg.put("success", false);
-			outputMSg.put("msg", "您的token不合法或者过期了，请重新登陆");
-			output(outputMSg.toJSONString(), response);
-			break;
+			request.setAttribute("success", true);
+			request.setAttribute("msg", "来自"+request.getRequestURI()+",请先登录");
+			request.setAttribute("preurl", request.getRequestURI());
+			RequestDispatcher rd=request.getRequestDispatcher("/ssoapp/login");
+			response.setContentType("text/html;charset=UTF-8;");
+			rd.forward(request, response);
 		}
 	}
 
