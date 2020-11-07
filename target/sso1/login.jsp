@@ -50,10 +50,8 @@
             success:function (resp) {
                 alert(resp.msg);
                 if(resp.success){
-                    //将token存在本地存储，然后跳转到主页面
-                    localStorage.setItem('token',resp.token);
-                    //location.href="web1.jsp";
-                    $('body').append(JSON.stringify(resp.msg));
+                    location.href="/";
+                    //$('body').append(JSON.stringify(resp.msg));
                 }else{$('body').append('wrong');}
 
             }

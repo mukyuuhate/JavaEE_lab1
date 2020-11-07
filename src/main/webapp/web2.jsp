@@ -32,7 +32,7 @@
 
     $("#loginout").on("click",function(){
         localStorage.removeItem("token");
-        location.href="login.html";
+        location.href="login.jsp";
     });
 </script>
 </body>

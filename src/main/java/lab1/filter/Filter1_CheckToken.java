@@ -1,11 +1,13 @@
 package lab1.filter;
 
+import com.nimbusds.jose.shaded.json.JSONObject;
 import lab1.jwt.JWTToken;
 import lab1.jwt.TokenState;
-import net.minidev.json.JSONObject;
+
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
@@ -14,6 +16,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -43,7 +46,13 @@ public class Filter1_CheckToken  implements Filter {
 		//其他API接口一律校验token
 		System.out.println("开始校验token");
 		//从请求头中获取token
-		String token=request.getHeader("token");
+		String token="";
+		Cookie[] cookies=request.getCookies();
+		for(Cookie cookie:cookies ){
+			if(cookie.getName().equals("token")){
+				token= cookie.getValue();
+			}
+		}
 //		if(token==null){
 //			//请求携带token
 //			String urlPath = request.getScheme() //当前链接使用的协议
@@ -71,11 +80,16 @@ public class Filter1_CheckToken  implements Filter {
 
 		switch (state) {
 		case VALID:
-			Object obj= resultMap.get("data");
-			System.out.println(obj.getClass());
-			resultMap.get("data");
+			JSONObject idAndTime= (JSONObject) resultMap.get("data");
+			System.out.println(idAndTime.toJSONString());
+			System.out.println(idAndTime.get("uid"));
+			System.out.println(idAndTime.get("iat"));
+			Date date=new Date();
+			long timeout=Long.parseLong(idAndTime.get("ext").toString())-date.getTime();
+			String timeoutString=timeout/(60*1000)+"分"+((timeout/1000)%60)+"秒";
 			//取出payload中数据,放入到request作用域中
-			request.setAttribute("data", resultMap.get("data"));
+			request.setAttribute("userNameFromToken", idAndTime.get("uid"));
+			request.setAttribute("timeRemainForToken", timeoutString);
 			//放行
 			chain.doFilter(request, response);
 			break;
