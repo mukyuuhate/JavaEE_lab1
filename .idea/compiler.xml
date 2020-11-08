@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="sso1" />
         <module name="JvavEELab1" />
+        <module name="JavaEE_lab1" />
       </profile>
     </annotationProcessing>
   </component>
