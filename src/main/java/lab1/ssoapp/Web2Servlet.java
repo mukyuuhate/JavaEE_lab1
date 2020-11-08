@@ -18,9 +18,10 @@ public class Web2Servlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("web2 post");
-        RequestDispatcher rd=request.getRequestDispatcher("/web2.jsp");
-        response.setContentType("text/html;charset=UTF-8;");
-        rd.forward(request, response);
+        JSONObject resultJSON=new JSONObject();
+        resultJSON.put("success", true);
+        resultJSON.put("msg", "执行了web2的post方法");
+        output(resultJSON.toJSONString(), response);
     }
 
 

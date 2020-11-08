@@ -6,6 +6,7 @@ import com.nimbusds.jose.crypto.MACVerifier;
 import com.sun.xml.internal.ws.util.StringUtils;
 import com.nimbusds.jose.shaded.json.JSONObject;
 import com.auth0.jwt.interfaces.Claim;
+import lab1.aes.AESSecretUtil;
 
 import javax.xml.bind.DatatypeConverter;
 import java.util.Date;
@@ -17,7 +18,8 @@ public class JWTToken{
     /**
     * 公用秘钥-保存在服务端，客户端无法知道
     * */
-    private static final byte[] SECRET = "3d990d2276917dfac04467df11fff26d".getBytes();
+    private static final byte[] SECRET = "5a1c7d11ace8785ab18497af34fea3c5".getBytes();
+    private static final String AESKey="bf2f93d88e04201240b55bcf3783cb7c";//随机生成的Key
 
     /**
      * 初始化head部分的数据为
@@ -47,6 +49,8 @@ public class JWTToken{
             System.err.println("签名失败:" + e.getMessage());
             e.printStackTrace();
         }
+        //对tokenstring加密
+        tokenString=AESSecretUtil.encryptToStr(tokenString,AESKey);
         return tokenString;
     }
 
@@ -57,8 +61,10 @@ public class JWTToken{
      * @return  Map<String, Object>
      */
     public static Map<String, Object> validToken(String token) {
+        //对token进行解密
         Map<String, Object> resultMap = new HashMap<String, Object>();
         try {
+            token=AESSecretUtil.decryptToStr(token,AESKey);
             JWSObject jwsObject = JWSObject.parse(token);
             Payload payload = jwsObject.getPayload();
             JWSVerifier verifier = new MACVerifier(SECRET);

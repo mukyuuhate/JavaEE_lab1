@@ -26,13 +26,11 @@ public class Filter0_CrossOriginResource extends CORSFilter implements Filter{
 
 
 	public void init(FilterConfig config) throws ServletException {
-		System.out.println("跨域资源处理过滤器初始化了");
 		super.init(config);
 	}
 	
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest request1=(HttpServletRequest) request;
-		System.out.println(request1.getRequestURI());
 		super.doFilter(request, response, chain);
 	}
 

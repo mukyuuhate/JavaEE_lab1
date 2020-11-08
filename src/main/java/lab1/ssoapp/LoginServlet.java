@@ -18,11 +18,10 @@ import java.util.Map;
 
 @WebServlet(urlPatterns="/ssoapp/login",loadOnStartup=1)
 public class LoginServlet extends HttpServlet {
-
 	private static final long serialVersionUID = 5285600116871825644L;
-
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		//若直接get方法过来，preurl改为首页
 		if(req.getAttribute("preurl")==null){
 			req.setAttribute("preurl","/");
 		}
@@ -36,23 +35,19 @@ public class LoginServlet extends HttpServlet {
 	 */
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
 		String userName=request.getParameter("userName");
 		String password =request.getParameter("password");
 		JSONObject resultJSON=new JSONObject();
-		System.out.println("login post");
-		//用户名密码校验成功后，生成token返回客户端
+		System.out.println("校验用户名密码");
+		//用户名密码校验成功后，生成token的cookie，要求客户端添加
 		if("admin1".equals(userName)&&"123".equals(password)){
-			//生成token
 			Map<String , Object> payload=new HashMap<String, Object>();
 			Date date=new Date();
 			payload.put("uid", "admin1");//用户ID
-			payload.put("iat", date.getTime());//生成时间
-			payload.put("ext",date.getTime()+1000*60*60);//过期时间1小时
+			payload.put("ext",date.getTime()+1000*60*60);//过期截止时间
 			String token=JWTToken.createToken(payload);
 			Cookie cookie = new Cookie("token",token);
 			response.addCookie(cookie);
-
 			resultJSON.put("success", true);
 			resultJSON.put("msg", "登陆成功");
 			resultJSON.put("token", token);
@@ -61,7 +56,7 @@ public class LoginServlet extends HttpServlet {
 			resultJSON.put("success", false);
 			resultJSON.put("msg", "用户名密码不对");
 		}
-		//输出结果
+		//输出结果，用ajax方式处理，成功跳转否则输出msg
 		output(resultJSON.toJSONString(), response);
 
 	}
@@ -72,7 +67,6 @@ public class LoginServlet extends HttpServlet {
 		out.println(jsonStr);
 		out.flush();
 		out.close();
-		
 	}
 
 }

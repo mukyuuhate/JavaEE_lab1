@@ -18,18 +18,18 @@ public class Web1Servlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("web1 post");
-		RequestDispatcher rd=request.getRequestDispatcher("/web1.jsp");
-		response.setContentType("text/html;charset=UTF-8;");
-		rd.forward(request, response);
+		JSONObject resultJSON=new JSONObject();
+		resultJSON.put("success", true);
+		resultJSON.put("msg", "执行了web1的post方法");
+		output(resultJSON.toJSONString(), response);
 	}
 
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		System.out.println("web1 get");
-
 		request.setAttribute("success", true);
-		request.setAttribute("msg", "web1登录成功");
+		request.setAttribute("msg", "这里是web1");
 		RequestDispatcher rd=request.getRequestDispatcher("/web1.jsp");
 		response.setContentType("text/html;charset=UTF-8;");
 		rd.forward(request, response);
