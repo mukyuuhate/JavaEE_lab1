@@ -1,5 +1,6 @@
 package lab1.ssoapp;
 
+import lab1.Controller;
 import net.minidev.json.JSONObject;
 
 import javax.servlet.RequestDispatcher;
@@ -18,7 +19,7 @@ public class Web1Servlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("web1 post");
-		JSONObject resultJSON=new JSONObject();
+		JSONObject resultJSON= new JSONObject();
 		resultJSON.put("success", true);
 		resultJSON.put("msg", "执行了web1的post方法");
 		output(resultJSON.toJSONString(), response);

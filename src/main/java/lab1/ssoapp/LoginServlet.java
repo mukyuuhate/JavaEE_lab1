@@ -1,5 +1,6 @@
 package lab1.ssoapp;
 
+import lab1.Controller;
 import lab1.jwt.JWTToken;
 import net.minidev.json.JSONObject;
 
@@ -40,7 +41,7 @@ public class LoginServlet extends HttpServlet {
 		JSONObject resultJSON=new JSONObject();
 		System.out.println("校验用户名密码");
 		//用户名密码校验成功后，生成token的cookie，要求客户端添加
-		if("admin1".equals(userName)&&"123".equals(password)){
+		if(Controller.checkUser(userName,password)){
 			Map<String , Object> payload=new HashMap<String, Object>();
 			Date date=new Date();
 			payload.put("uid", "admin1");//用户ID
