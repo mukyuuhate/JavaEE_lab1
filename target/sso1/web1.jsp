@@ -28,7 +28,6 @@
             url:"",
             dataType:'json',
             success:function (resp) {
-                alert(resp.msg);
                 $('body').append(resp.msg);
             }
         })
